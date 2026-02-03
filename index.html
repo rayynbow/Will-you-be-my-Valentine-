@@ -101,20 +101,20 @@ const messages = [
 // When No is clicked
 noBtn.addEventListener('click', () => {
   noClicks++;
-  
-  // Shrink No button
-  let noSize = Math.max(50, 150 - noClicks*20);
-  noBtn.style.fontSize = noSize/10 + 'em';
-  noBtn.style.padding = noSize/5 + 'px ' + noSize/10 + 'px';
-  
-  // Grow Yes button
-  let yesSize = 150 + noClicks*20;
-  yesBtn.style.fontSize = yesSize/50 + 'em';
-  yesBtn.style.padding = yesSize/10 + 'px ' + yesSize/20 + 'px';
 
-  // Change question to next message
+  // Shrink No button: always decreases
+  let noSize = Math.max(50, 150 - noClicks * 20);
+  noBtn.style.fontSize = noSize / 10 + 'em';
+  noBtn.style.padding = noSize / 5 + 'px ' + noSize / 10 + 'px';
+
+  // Grow Yes button
+  let yesSize = 150 + noClicks * 20;
+  yesBtn.style.fontSize = yesSize / 50 + 'em';
+  yesBtn.style.padding = yesSize / 10 + 'px ' + yesSize / 20 + 'px';
+
+  // Update question
   if (noClicks <= messages.length) {
-    question.textContent = messages[noClicks-1];
+    question.textContent = messages[noClicks - 1];
   } else {
     question.textContent = "Pretty please? 😇";
   }
@@ -180,7 +180,6 @@ function animateFireworks() {
 // Floating hearts and cats in background
 function createFloatingGraphic() {
   const graphic = document.createElement('div');
-  // Randomly choose heart or cat
   const emoji = Math.random() > 0.5 ? '💙' : '🐱';
   graphic.textContent = emoji;
   graphic.style.position = 'fixed';
