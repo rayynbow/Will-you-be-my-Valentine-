@@ -4,11 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Will You Be My Valentine?</title>
+
 <style>
   body {
     margin: 0;
     font-family: 'Comic Sans MS', cursive, sans-serif;
-    background: linear-gradient(to bottom, #a0c4ff, #d0e7ff);
+    background: linear-gradient(to bottom, #9ecbff, #d6ecff);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -16,230 +17,133 @@
     height: 100vh;
     text-align: center;
     overflow: hidden;
-    animation: pulse 4s infinite alternate;
   }
 
-  @keyframes pulse {
-    0% {background: linear-gradient(to bottom, #a0c4ff, #d0e7ff);}
-    100% {background: linear-gradient(to bottom, #74b9ff, #a8e0ff);}
+  img {
+    width: 220px;
+    height: auto;
+    margin-bottom: 15px;
   }
 
   h1 {
-    font-size: 3em;
+    font-size: 2.8em;
     color: #003366;
-    margin-bottom: 1em;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    margin-bottom: 20px;
+  }
+
+  .buttons {
+    display: flex;
+    gap: 20px;
   }
 
   button {
-    padding: 15px 30px;
-    font-size: 1.5em;
-    margin: 10px;
     border: none;
-    border-radius: 12px;
+    border-radius: 14px;
     cursor: pointer;
     color: white;
-    transition: all 0.3s;
-    position: relative;
+    transition: all 0.3s ease;
   }
 
-  button:hover {
-    transform: rotate(-5deg) scale(1.1);
-  }
-
+  /* EXPLICIT STARTING SIZES (IMPORTANT) */
   #yesBtn {
     background-color: #1e90ff;
-    box-shadow: 0 5px 15px rgba(30,144,255,0.4);
+    font-size: 26px;
+    padding: 18px 36px;
   }
 
   #noBtn {
     background-color: #0059b3;
-    box-shadow: 0 5px 15px rgba(0,89,179,0.4);
-  }
-
-  canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    width: 100%;
-    height: 100%;
+    font-size: 26px;
+    padding: 18px 36px;
   }
 </style>
 </head>
+
 <body>
 <!-- Deploy trigger ✔ -->
+
+<img id="gif" src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif">
+
 <h1 id="question">Will you be my Valentine? 💙</h1>
-<div>
+
+<div class="buttons">
   <button id="yesBtn">Yes 💌</button>
   <button id="noBtn">No 😢</button>
 </div>
 
-<canvas id="fireworks"></canvas>
-
 <script>
-const question = document.getElementById('question');
-const yesBtn = document.getElementById('yesBtn');
-const noBtn = document.getElementById('noBtn');
-const canvas = document.getElementById('fireworks');
-const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+const question = document.getElementById("question");
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+const gif = document.getElementById("gif");
 
-let noClicks = 0;
+let step = 0;
 
-// Dynamically get the starting size of the No button
-let computedNoSize = parseFloat(window.getComputedStyle(noBtn).fontSize); // in px
-
-// Persuasive messages
-const messages = [
-  "Are you sure? I promise I'm extra sweet! 🍬",
-  "No? But Otto says you should!",
-  "Come on, don't be shy! 💕",
-  "You know saying yes makes your day 1000% better! 😍",
-  "I think we're a perfect match! 🌟",
-  "Honestly, saying yes is scientifically proven to boost happiness! 😇",
-  "I even got a cat cheering for you! 🐱",
-  "You're the missing piece to my heart puzzle 💖",
-  "Come on, it's destiny! ✨",
-  "Pretty please? I’ll even bake virtual cookies! 🍪"
+/* Questions */
+const questions = [
+  "Are you sure? I’m actually very cute 🥺",
+  "What if I promise snacks and hugs?",
+  "Otto thinks you should reconsider 🐱",
+  "This is getting suspicious… destiny maybe?",
+  "Saying yes unlocks premium happiness 💙",
+  "I am literally asking so nicely right now",
+  "At this point the cat will be disappointed",
+  "Okay but imagine how cute we’d be",
+  "Last chance before I dramatically gasp 😮",
+  "Okay fine… but please say yes 😭"
 ];
 
-// Funny cat GIFs
-const catGIFs = [
+/* Cat GIFs (one per question) */
+const gifs = [
   "https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif",
   "https://media.giphy.com/media/mlvseq9yvZhba/giphy.gif",
   "https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif",
-  "https://media.giphy.com/media/13borq7Zo2kulO/giphy.gif"
+  "https://media.giphy.com/media/13borq7Zo2kulO/giphy.gif",
+  "https://media.giphy.com/media/VbnUQpnihPSIgIXuZv/giphy.gif",
+  "https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif",
+  "https://media.giphy.com/media/l4KibK3JwaVo0CjDO/giphy.gif",
+  "https://media.giphy.com/media/5i7umUqAOYYEw/giphy.gif",
+  "https://media.giphy.com/media/ICOgUNjpvO0PC/giphy.gif",
+  "https://media.giphy.com/media/12HZukMBlutpoQ/giphy.gif"
 ];
 
-function showCatGIF() {
-  const gif = document.createElement('img');
-  gif.src = catGIFs[Math.floor(Math.random() * catGIFs.length)];
-  gif.style.position = 'fixed';
-  gif.style.left = Math.random() * (window.innerWidth - 150) + 'px';
-  gif.style.top = window.innerHeight + 'px';
-  gif.style.width = '150px';
-  gif.style.height = '150px';
-  gif.style.pointerEvents = 'none';
-  gif.style.transition = 'transform 4s ease, opacity 4s ease';
-  document.body.appendChild(gif);
+/* Button sizes (LOCKED) */
+let yesFont = 26;
+let yesPad = 18;
+let noFont = 26;
+let noPad = 18;
 
-  // Float up and fade out
-  setTimeout(() => {
-    gif.style.transform = `translateY(-${window.innerHeight + 150}px)`;
-    gif.style.opacity = 0;
-  }, 50);
+/* NO CLICK */
+noBtn.addEventListener("click", () => {
+  if (step < questions.length) {
+    question.textContent = questions[step];
+    gif.src = gifs[step];
 
-  setTimeout(() => {
-    gif.remove();
-  }, 4000);
-}
+    /* Size changes AFTER question change */
+    noFont = Math.max(10, noFont - 3);
+    noPad = Math.max(6, noPad - 2);
 
-// No button click
-noBtn.addEventListener('click', () => {
-  noClicks++;
+    yesFont += 4;
+    yesPad += 3;
 
-  // Shrink No button from first click
-  let noSize = Math.max(50, computedNoSize - noClicks * 5); // px
-  noBtn.style.fontSize = noSize + 'px';
-  noBtn.style.padding = noSize / 3 + 'px ' + noSize / 6 + 'px';
+    noBtn.style.fontSize = noFont + "px";
+    noBtn.style.padding = noPad + "px " + (noPad * 2) + "px";
 
-  // Yes button grows
-  let yesSize = 24 + noClicks * 3; // em-like scaling
-  yesBtn.style.fontSize = yesSize / 1.5 + 'px';
-  yesBtn.style.padding = yesSize / 2 + 'px ' + yesSize / 4 + 'px';
+    yesBtn.style.fontSize = yesFont + "px";
+    yesBtn.style.padding = yesPad + "px " + (yesPad * 2) + "px";
 
-  // Update question
-  if (noClicks <= messages.length) {
-    question.textContent = messages[noClicks - 1];
-  } else {
-    question.textContent = "Pretty please? 😇";
+    step++;
   }
-
-  // Show a cat GIF
-  showCatGIF();
 });
 
-// Yes button click
-yesBtn.addEventListener('click', () => {
-  question.textContent = "YAY! 💙 You said YES! 💌";
-  yesBtn.style.display = 'none';
-  noBtn.style.display = 'none';
-  startFireworks();
+/* YES CLICK */
+yesBtn.addEventListener("click", () => {
+  gif.src = "https://media.giphy.com/media/l0MYC0LajbaPoEADu/giphy.gif";
+  question.textContent = "YAY 💙 YOU SAID YES 💌";
+  yesBtn.style.display = "none";
+  noBtn.style.display = "none";
 });
-
-// Fireworks
-let fireworksArr = [];
-
-function drawHeart(x, y, size, color) {
-  ctx.save();
-  ctx.translate(x, y);
-  ctx.fillStyle = color;
-  ctx.beginPath();
-  ctx.moveTo(0, 0);
-  ctx.bezierCurveTo(size/2, -size/2, size, size/3, 0, size);
-  ctx.bezierCurveTo(-size, size/3, -size/2, -size/2, 0, 0);
-  ctx.fill();
-  ctx.restore();
-}
-
-function startFireworks() {
-  setInterval(() => {
-    createFirework(Math.random() * canvas.width, Math.random() * canvas.height/2);
-  }, 300);
-  requestAnimationFrame(animateFireworks);
-}
-
-function createFirework(x, y) {
-  for (let i=0; i<30; i++) {
-    fireworksArr.push({
-      x: x,
-      y: y,
-      dx: (Math.random() - 0.5) * 6,
-      dy: (Math.random() - 0.5) * 6,
-      alpha: 1,
-      color: `hsl(${Math.random()*360}, 100%, 50%)`,
-      size: 5 + Math.random()*5
-    });
-  }
-}
-
-function animateFireworks() {
-  ctx.clearRect(0,0,canvas.width, canvas.height);
-  fireworksArr.forEach((f, i) => {
-    drawHeart(f.x, f.y, f.size, f.color);
-    f.x += f.dx;
-    f.y += f.dy;
-    f.alpha -= 0.02;
-    if(f.alpha <= 0) fireworksArr.splice(i, 1);
-  });
-  requestAnimationFrame(animateFireworks);
-}
-
-// Floating hearts and cats in background
-function createFloatingGraphic() {
-  const graphic = document.createElement('div');
-  const emoji = Math.random() > 0.5 ? '💙' : '🐱';
-  graphic.textContent = emoji;
-  graphic.style.position = 'fixed';
-  graphic.style.left = Math.random() * window.innerWidth + 'px';
-  graphic.style.top = window.innerHeight + 'px';
-  graphic.style.fontSize = (15 + Math.random()*25) + 'px';
-  graphic.style.opacity = Math.random();
-  graphic.style.pointerEvents = 'none';
-  graphic.style.transition = 'transform 6s linear';
-  document.body.appendChild(graphic);
-  setTimeout(() => {
-    graphic.style.transform = `translateY(-${window.innerHeight + 50}px)`;
-  }, 10);
-  setTimeout(() => {
-    graphic.remove();
-  }, 6000);
-}
-
-setInterval(createFloatingGraphic, 500);
-
 </script>
+
 </body>
 </html>
