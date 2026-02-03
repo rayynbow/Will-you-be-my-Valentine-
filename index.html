@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Will You Be My Valentine?</title>
+<title>Valentine 💙</title>
 
 <style>
   body {
@@ -16,17 +16,22 @@
     justify-content: center;
     height: 100vh;
     text-align: center;
-    overflow: hidden;
   }
 
-  img {
-    width: 220px;
-    height: auto;
+  .gif-box {
+    width: 260px;
+    height: 260px;
     margin-bottom: 15px;
   }
 
+  .gif-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
   h1 {
-    font-size: 2.8em;
+    font-size: 2.6em;
     color: #003366;
     margin-bottom: 20px;
   }
@@ -44,7 +49,6 @@
     transition: all 0.3s ease;
   }
 
-  /* EXPLICIT STARTING SIZES (IMPORTANT) */
   #yesBtn {
     background-color: #1e90ff;
     font-size: 26px;
@@ -60,9 +64,10 @@
 </head>
 
 <body>
-<!-- Deploy trigger ✔ -->
 
-<img id="gif" src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif">
+<div class="gif-box">
+  <img id="gif" src="https://media.tenor.com/JIX9t2j0ZTNAAAAC/cat-cute.gif" alt="cute cat gif">
+</div>
 
 <h1 id="question">Will you be my Valentine? 💙</h1>
 
@@ -73,72 +78,63 @@
 
 <script>
 const question = document.getElementById("question");
+const gif = document.getElementById("gif");
 const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
-const gif = document.getElementById("gif");
 
 let step = 0;
 
-/* Questions */
 const questions = [
-  "Are you sure? I’m actually very cute 🥺",
-  "What if I promise snacks and hugs?",
-  "Otto thinks you should reconsider 🐱",
-  "This is getting suspicious… destiny maybe?",
-  "Saying yes unlocks premium happiness 💙",
-  "I am literally asking so nicely right now",
-  "At this point the cat will be disappointed",
-  "Okay but imagine how cute we’d be",
-  "Last chance before I dramatically gasp 😮",
-  "Okay fine… but please say yes 😭"
+  "Are you sure? I’m literally adorable 🥺",
+  "This cat is judging you right now",
+  "Okay but… imagine the vibes?",
+  "The cat is begging now 😭",
+  "You’re breaking tiny imaginary hearts",
+  "Saying yes costs nothing btw",
+  "The cat will remember this",
+  "We could be cute AND iconic",
+  "This is emotional damage",
+  "Please. I am on my knees."
 ];
 
-/* Cat GIFs (one per question) */
 const gifs = [
-  "https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif",
-  "https://media.giphy.com/media/mlvseq9yvZhba/giphy.gif",
-  "https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif",
-  "https://media.giphy.com/media/13borq7Zo2kulO/giphy.gif",
-  "https://media.giphy.com/media/VbnUQpnihPSIgIXuZv/giphy.gif",
-  "https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif",
-  "https://media.giphy.com/media/l4KibK3JwaVo0CjDO/giphy.gif",
-  "https://media.giphy.com/media/5i7umUqAOYYEw/giphy.gif",
-  "https://media.giphy.com/media/ICOgUNjpvO0PC/giphy.gif",
-  "https://media.giphy.com/media/12HZukMBlutpoQ/giphy.gif"
+  "https://media.tenor.com/JIX9t2j0ZTNAAAAC/cat-cute.gif",
+  "https://media.tenor.com/mlvseq9yvZhAAAAC/cat-sad.gif",
+  "https://media.tenor.com/3oriO0OEd9QIDdllqoAAAAC/cat-stare.gif",
+  "https://media.tenor.com/13borq7Zo2kulOAAAAC/cat-beg.gif",
+  "https://media.tenor.com/VbnUQpnihPSIgAAAAC/cat-cry.gif",
+  "https://media.tenor.com/MDJ9IbxxvDUQAAAAC/cat-please.gif",
+  "https://media.tenor.com/l4KibK3JwaVoAAAAC/cat-disappointed.gif",
+  "https://media.tenor.com/5i7umUqAOYYEwAAAAC/cat-love.gif",
+  "https://media.tenor.com/ICOgUNjpvO0PCAAAAC/cat-dramatic.gif",
+  "https://media.tenor.com/12HZukMBlutpoQAAAAC/cat-begging.gif"
 ];
 
-/* Button sizes (LOCKED) */
-let yesFont = 26;
-let yesPad = 18;
-let noFont = 26;
-let noPad = 18;
+let yesFont = 26, yesPad = 18;
+let noFont = 26, noPad = 18;
 
-/* NO CLICK */
 noBtn.addEventListener("click", () => {
   if (step < questions.length) {
     question.textContent = questions[step];
     gif.src = gifs[step];
 
-    /* Size changes AFTER question change */
     noFont = Math.max(10, noFont - 3);
     noPad = Math.max(6, noPad - 2);
-
     yesFont += 4;
     yesPad += 3;
 
     noBtn.style.fontSize = noFont + "px";
-    noBtn.style.padding = noPad + "px " + (noPad * 2) + "px";
+    noBtn.style.padding = `${noPad}px ${noPad * 2}px`;
 
     yesBtn.style.fontSize = yesFont + "px";
-    yesBtn.style.padding = yesPad + "px " + (yesPad * 2) + "px";
+    yesBtn.style.padding = `${yesPad}px ${yesPad * 2}px`;
 
     step++;
   }
 });
 
-/* YES CLICK */
 yesBtn.addEventListener("click", () => {
-  gif.src = "https://media.giphy.com/media/l0MYC0LajbaPoEADu/giphy.gif";
+  gif.src = "https://media.tenor.com/l0MYC0LajbaPoEADuAAAAC/cat-happy.gif";
   question.textContent = "YAY 💙 YOU SAID YES 💌";
   yesBtn.style.display = "none";
   noBtn.style.display = "none";
