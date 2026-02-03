@@ -88,26 +88,58 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 let noClicks = 0;
+const noBaseSize = 150; // fixed starting size for No button
 
 // Persuasive messages
 const messages = [
   "Are you sure? I promise I'm extra sweet! 🍬",
   "No? But Otto says you should!",
-  "Come on, don't be shy! 💕",
+  "Come on, don't be shy! You know you want to 💕",
   "You know saying yes makes your day 1000% better! 😍",
+  "But BABBBEEEEEEEEEEEE",
   "I think we're a perfect match! 🌟"
 ];
 
-// When No is clicked
+// Funny cat GIFs
+const catGIFs = [
+  "https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif",
+  "https://media.giphy.com/media/mlvseq9yvZhba/giphy.gif",
+  "https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif",
+  "https://media.giphy.com/media/13borq7Zo2kulO/giphy.gif"
+];
+
+function showCatGIF() {
+  const gif = document.createElement('img');
+  gif.src = catGIFs[Math.floor(Math.random() * catGIFs.length)];
+  gif.style.position = 'fixed';
+  gif.style.left = Math.random() * (window.innerWidth - 150) + 'px';
+  gif.style.top = Math.random() * (window.innerHeight - 150) + 'px';
+  gif.style.width = '100px';
+  gif.style.height = '100px';
+  gif.style.pointerEvents = 'none';
+  gif.style.transition = 'transform 3s ease, opacity 3s ease';
+  document.body.appendChild(gif);
+
+  setTimeout(() => {
+    gif.style.transform = `translateY(-100px)`;
+    gif.style.opacity = 0;
+  }, 50);
+
+  setTimeout(() => {
+    gif.remove();
+  }, 3000);
+}
+
+// No button click
 noBtn.addEventListener('click', () => {
   noClicks++;
 
-  // Shrink No button: always decreases
-  let noSize = Math.max(50, 150 - noClicks * 20);
+  // Always shrink No button
+  let noSize = Math.max(50, noBaseSize - noClicks * 20);
   noBtn.style.fontSize = noSize / 10 + 'em';
   noBtn.style.padding = noSize / 5 + 'px ' + noSize / 10 + 'px';
 
-  // Grow Yes button
+  // Yes button grows
   let yesSize = 150 + noClicks * 20;
   yesBtn.style.fontSize = yesSize / 50 + 'em';
   yesBtn.style.padding = yesSize / 10 + 'px ' + yesSize / 20 + 'px';
@@ -118,9 +150,12 @@ noBtn.addEventListener('click', () => {
   } else {
     question.textContent = "Pretty please? 😇";
   }
+
+  // Show a funny cat GIF
+  showCatGIF();
 });
 
-// When Yes is clicked
+// Yes button click
 yesBtn.addEventListener('click', () => {
   question.textContent = "YAY! 💙 You said YES! 💌";
   yesBtn.style.display = 'none';
@@ -131,7 +166,6 @@ yesBtn.addEventListener('click', () => {
 // Fireworks
 let fireworksArr = [];
 
-// Heart shape function
 function drawHeart(x, y, size, color) {
   ctx.save();
   ctx.translate(x, y);
@@ -197,6 +231,7 @@ function createFloatingGraphic() {
     graphic.remove();
   }, 6000);
 }
+
 setInterval(createFloatingGraphic, 500);
 
 </script>
