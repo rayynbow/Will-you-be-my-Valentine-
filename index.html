@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Valentine 💙</title>
+<title>Will You Be My Valentine? 💙</title>
 
 <style>
   body {
@@ -18,16 +18,17 @@
     text-align: center;
   }
 
-  .gif-box {
+  .image-box {
     width: 260px;
     height: 260px;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
   }
 
-  .gif-box img {
+  .image-box img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover;
+    border-radius: 20px;
   }
 
   h1 {
@@ -65,8 +66,8 @@
 
 <body>
 
-<div class="gif-box">
-  <img id="gif" src="https://media.tenor.com/JIX9t2j0ZTNAAAAC/cat-cute.gif" alt="cute cat gif">
+<div class="image-box">
+  <img id="catImg" src="https://placekitten.com/400/400" alt="cute cat">
 </div>
 
 <h1 id="question">Will you be my Valentine? 💙</h1>
@@ -78,48 +79,55 @@
 
 <script>
 const question = document.getElementById("question");
-const gif = document.getElementById("gif");
+const catImg = document.getElementById("catImg");
 const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
 
 let step = 0;
 
+// Persuasive questions
 const questions = [
-  "Are you sure? I’m literally adorable 🥺",
-  "This cat is judging you right now",
-  "Okay but… imagine the vibes?",
-  "The cat is begging now 😭",
-  "You’re breaking tiny imaginary hearts",
-  "Saying yes costs nothing btw",
-  "The cat will remember this",
-  "We could be cute AND iconic",
-  "This is emotional damage",
-  "Please. I am on my knees."
+  "Are you sure? I asked nicely 🥺",
+  "This cat thinks you should reconsider",
+  "Okay but imagine how cute we'd be",
+  "The cat is disappointed now",
+  "That hurt a little, not gonna lie",
+  "Saying yes is literally free",
+  "This cat believes in us",
+  "We could be iconic together",
+  "The cat has emotional damage",
+  "Last chance… the cat is begging"
 ];
 
-const gifs = [
-  "https://media.tenor.com/JIX9t2j0ZTNAAAAC/cat-cute.gif",
-  "https://media.tenor.com/mlvseq9yvZhAAAAC/cat-sad.gif",
-  "https://media.tenor.com/3oriO0OEd9QIDdllqoAAAAC/cat-stare.gif",
-  "https://media.tenor.com/13borq7Zo2kulOAAAAC/cat-beg.gif",
-  "https://media.tenor.com/VbnUQpnihPSIgAAAAC/cat-cry.gif",
-  "https://media.tenor.com/MDJ9IbxxvDUQAAAAC/cat-please.gif",
-  "https://media.tenor.com/l4KibK3JwaVoAAAAC/cat-disappointed.gif",
-  "https://media.tenor.com/5i7umUqAOYYEwAAAAC/cat-love.gif",
-  "https://media.tenor.com/ICOgUNjpvO0PCAAAAC/cat-dramatic.gif",
-  "https://media.tenor.com/12HZukMBlutpoQAAAAC/cat-begging.gif"
+// Static cat images (reliable)
+const images = [
+  "https://placekitten.com/401/401",
+  "https://placekitten.com/402/402",
+  "https://placekitten.com/403/403",
+  "https://placekitten.com/404/404",
+  "https://placekitten.com/405/405",
+  "https://placekitten.com/406/406",
+  "https://placekitten.com/407/407",
+  "https://placekitten.com/408/408",
+  "https://placekitten.com/409/409",
+  "https://placekitten.com/410/410"
 ];
 
-let yesFont = 26, yesPad = 18;
-let noFont = 26, noPad = 18;
+let yesFont = 26;
+let yesPad = 18;
+let noFont = 26;
+let noPad = 18;
 
 noBtn.addEventListener("click", () => {
   if (step < questions.length) {
     question.textContent = questions[step];
-    gif.src = gifs[step];
+    catImg.src = images[step];
 
+    // NO button ALWAYS shrinks
     noFont = Math.max(10, noFont - 3);
     noPad = Math.max(6, noPad - 2);
+
+    // YES button ALWAYS grows
     yesFont += 4;
     yesPad += 3;
 
@@ -134,8 +142,8 @@ noBtn.addEventListener("click", () => {
 });
 
 yesBtn.addEventListener("click", () => {
-  gif.src = "https://media.tenor.com/l0MYC0LajbaPoEADuAAAAC/cat-happy.gif";
   question.textContent = "YAY 💙 YOU SAID YES 💌";
+  catImg.src = "https://placekitten.com/500/500";
   yesBtn.style.display = "none";
   noBtn.style.display = "none";
 });
