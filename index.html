@@ -8,7 +8,7 @@
   body {
     margin: 0;
     font-family: 'Comic Sans MS', cursive, sans-serif;
-    background: linear-gradient(to bottom, #ffb3c6, #ffe6f0);
+    background: linear-gradient(to bottom, #a0c4ff, #d0e7ff);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -16,13 +16,20 @@
     height: 100vh;
     text-align: center;
     overflow: hidden;
+    animation: pulse 4s infinite alternate;
+  }
+
+  @keyframes pulse {
+    0% {background: linear-gradient(to bottom, #a0c4ff, #d0e7ff);}
+    100% {background: linear-gradient(to bottom, #74b9ff, #a8e0ff);}
   }
 
   h1 {
     font-size: 3em;
-    color: #d10068;
+    color: #003366;
     margin-bottom: 1em;
     transition: all 0.3s;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
   }
 
   button {
@@ -37,12 +44,18 @@
     position: relative;
   }
 
+  button:hover {
+    transform: rotate(-5deg) scale(1.1);
+  }
+
   #yesBtn {
-    background-color: #ff4da6;
+    background-color: #1e90ff;
+    box-shadow: 0 5px 15px rgba(30,144,255,0.4);
   }
 
   #noBtn {
-    background-color: #900048;
+    background-color: #0059b3;
+    box-shadow: 0 5px 15px rgba(0,89,179,0.4);
   }
 
   canvas {
@@ -57,7 +70,7 @@
 </head>
 <body>
 <!-- Deploy trigger ✔ -->
-<h1 id="question">Will you be my Valentine? 💖</h1>
+<h1 id="question">Will you be my Valentine? 💙</h1>
 <div>
   <button id="yesBtn">Yes 💌</button>
   <button id="noBtn">No 😢</button>
@@ -76,7 +89,7 @@ canvas.height = window.innerHeight;
 
 let noClicks = 0;
 
-// Array of persuasive messages
+// Persuasive messages
 const messages = [
   "Are you sure? I promise I'm extra sweet! 🍬",
   "No? But Otto says you should!",
@@ -109,20 +122,32 @@ noBtn.addEventListener('click', () => {
 
 // When Yes is clicked
 yesBtn.addEventListener('click', () => {
-  question.textContent = "YAY! 💖 You said YES! 💌";
+  question.textContent = "YAY! 💙 You said YES! 💌";
   yesBtn.style.display = 'none';
   noBtn.style.display = 'none';
   startFireworks();
 });
 
-// Fireworks animation
+// Fireworks
 let fireworksArr = [];
+
+// Heart shape function
+function drawHeart(x, y, size, color) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  ctx.bezierCurveTo(size/2, -size/2, size, size/3, 0, size);
+  ctx.bezierCurveTo(-size, size/3, -size/2, -size/2, 0, 0);
+  ctx.fill();
+  ctx.restore();
+}
 
 function startFireworks() {
   setInterval(() => {
     createFirework(Math.random() * canvas.width, Math.random() * canvas.height/2);
   }, 300);
-
   requestAnimationFrame(animateFireworks);
 }
 
@@ -131,10 +156,11 @@ function createFirework(x, y) {
     fireworksArr.push({
       x: x,
       y: y,
-      dx: (Math.random() - 0.5) * 5,
-      dy: (Math.random() - 0.5) * 5,
+      dx: (Math.random() - 0.5) * 6,
+      dy: (Math.random() - 0.5) * 6,
       alpha: 1,
-      color: `hsl(${Math.random()*360}, 100%, 60%)`
+      color: `hsl(${Math.random()*360}, 100%, 50%)`,
+      size: 5 + Math.random()*5
     });
   }
 }
@@ -142,21 +168,38 @@ function createFirework(x, y) {
 function animateFireworks() {
   ctx.clearRect(0,0,canvas.width, canvas.height);
   fireworksArr.forEach((f, i) => {
-    ctx.fillStyle = f.color;
-    ctx.globalAlpha = f.alpha;
-    ctx.beginPath();
-    ctx.arc(f.x, f.y, 3, 0, Math.PI*2);
-    ctx.fill();
+    drawHeart(f.x, f.y, f.size, f.color);
     f.x += f.dx;
     f.y += f.dy;
     f.alpha -= 0.02;
-    if (f.alpha <= 0) fireworksArr.splice(i, 1);
+    if(f.alpha <= 0) fireworksArr.splice(i, 1);
   });
   requestAnimationFrame(animateFireworks);
 }
-</script>
 
+// Floating hearts and cats in background
+function createFloatingGraphic() {
+  const graphic = document.createElement('div');
+  // Randomly choose heart or cat
+  const emoji = Math.random() > 0.5 ? '💙' : '🐱';
+  graphic.textContent = emoji;
+  graphic.style.position = 'fixed';
+  graphic.style.left = Math.random() * window.innerWidth + 'px';
+  graphic.style.top = window.innerHeight + 'px';
+  graphic.style.fontSize = (15 + Math.random()*25) + 'px';
+  graphic.style.opacity = Math.random();
+  graphic.style.pointerEvents = 'none';
+  graphic.style.transition = 'transform 6s linear';
+  document.body.appendChild(graphic);
+  setTimeout(() => {
+    graphic.style.transform = `translateY(-${window.innerHeight + 50}px)`;
+  }, 10);
+  setTimeout(() => {
+    graphic.remove();
+  }, 6000);
+}
+setInterval(createFloatingGraphic, 500);
+
+</script>
 </body>
 </html>
-
-
