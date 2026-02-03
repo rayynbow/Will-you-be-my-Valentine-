@@ -28,7 +28,6 @@
     font-size: 3em;
     color: #003366;
     margin-bottom: 1em;
-    transition: all 0.3s;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
   }
 
@@ -88,16 +87,22 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 let noClicks = 0;
-const noBaseSize = 150; // fixed starting size for No button
+
+// Dynamically get the starting size of the No button
+let computedNoSize = parseFloat(window.getComputedStyle(noBtn).fontSize); // in px
 
 // Persuasive messages
 const messages = [
   "Are you sure? I promise I'm extra sweet! 🍬",
   "No? But Otto says you should!",
-  "Come on, don't be shy! You know you want to 💕",
+  "Come on, don't be shy! 💕",
   "You know saying yes makes your day 1000% better! 😍",
-  "But BABBBEEEEEEEEEEEE",
-  "I think we're a perfect match! 🌟"
+  "I think we're a perfect match! 🌟",
+  "Honestly, saying yes is scientifically proven to boost happiness! 😇",
+  "I even got a cat cheering for you! 🐱",
+  "You're the missing piece to my heart puzzle 💖",
+  "Come on, it's destiny! ✨",
+  "Pretty please? I’ll even bake virtual cookies! 🍪"
 ];
 
 // Funny cat GIFs
@@ -113,36 +118,37 @@ function showCatGIF() {
   gif.src = catGIFs[Math.floor(Math.random() * catGIFs.length)];
   gif.style.position = 'fixed';
   gif.style.left = Math.random() * (window.innerWidth - 150) + 'px';
-  gif.style.top = Math.random() * (window.innerHeight - 150) + 'px';
-  gif.style.width = '100px';
-  gif.style.height = '100px';
+  gif.style.top = window.innerHeight + 'px';
+  gif.style.width = '150px';
+  gif.style.height = '150px';
   gif.style.pointerEvents = 'none';
-  gif.style.transition = 'transform 3s ease, opacity 3s ease';
+  gif.style.transition = 'transform 4s ease, opacity 4s ease';
   document.body.appendChild(gif);
 
+  // Float up and fade out
   setTimeout(() => {
-    gif.style.transform = `translateY(-100px)`;
+    gif.style.transform = `translateY(-${window.innerHeight + 150}px)`;
     gif.style.opacity = 0;
   }, 50);
 
   setTimeout(() => {
     gif.remove();
-  }, 3000);
+  }, 4000);
 }
 
 // No button click
 noBtn.addEventListener('click', () => {
   noClicks++;
 
-  // Always shrink No button
-  let noSize = Math.max(50, noBaseSize - noClicks * 20);
-  noBtn.style.fontSize = noSize / 10 + 'em';
-  noBtn.style.padding = noSize / 5 + 'px ' + noSize / 10 + 'px';
+  // Shrink No button from first click
+  let noSize = Math.max(50, computedNoSize - noClicks * 5); // px
+  noBtn.style.fontSize = noSize + 'px';
+  noBtn.style.padding = noSize / 3 + 'px ' + noSize / 6 + 'px';
 
   // Yes button grows
-  let yesSize = 150 + noClicks * 20;
-  yesBtn.style.fontSize = yesSize / 50 + 'em';
-  yesBtn.style.padding = yesSize / 10 + 'px ' + yesSize / 20 + 'px';
+  let yesSize = 24 + noClicks * 3; // em-like scaling
+  yesBtn.style.fontSize = yesSize / 1.5 + 'px';
+  yesBtn.style.padding = yesSize / 2 + 'px ' + yesSize / 4 + 'px';
 
   // Update question
   if (noClicks <= messages.length) {
@@ -151,7 +157,7 @@ noBtn.addEventListener('click', () => {
     question.textContent = "Pretty please? 😇";
   }
 
-  // Show a funny cat GIF
+  // Show a cat GIF
   showCatGIF();
 });
 
