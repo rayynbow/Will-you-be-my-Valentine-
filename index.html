@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Will You Be My Valentine? 💙</title>
-
 <style>
   body {
     margin: 0;
@@ -63,11 +62,10 @@
   }
 </style>
 </head>
-
 <body>
 
 <div class="image-box">
-  <img id="catImg" src="https://placekitten.com/400/400" alt="cute cat">
+  <img id="catImg" src="images/cat1.jpg" alt="cute cat">
 </div>
 
 <h1 id="question">Will you be my Valentine? 💙</h1>
@@ -85,6 +83,7 @@ const noBtn = document.getElementById("noBtn");
 
 let step = 0;
 
+  
 // Persuasive questions
 const questions = [
   "Are you sure? I asked nicely 🥺",
@@ -99,18 +98,18 @@ const questions = [
   "Last chance… the cat is begging"
 ];
 
-// Static cat images (reliable)
+// Use your images folder — make sure the paths match your repo
 const images = [
-  "cat1.jpg",
-  "cat2.jpg",
-  "cat3.jpg",
-  "cat4.jpg",
-  "cat5.jpg",
-  "cat1.jpg",
-  "cat2.jpg",
-  "cat3.jpg",
-  "cat4.jpg",
-  "cat5.jpg"
+  "images/cat1.jpg",
+  "images/cat2.jpg",
+  "images/cat3.jpg",
+  "images/cat4.jpg",
+  "images/cat5.jpg",
+  "images/cat6.jpg",
+  "images/cat7.jpg",
+  "images/cat8.jpg",
+  "images/cat9.jpg",
+  "images/cat10.jpg"
 ];
 
 let yesFont = 26;
@@ -143,7 +142,7 @@ noBtn.addEventListener("click", () => {
 
 yesBtn.addEventListener("click", () => {
   question.textContent = "YAY 💙 YOU SAID YES 💌";
-  catImg.src = "https://placekitten.com/500/500";
+  catImg.src = "images/cat5.jpg"; // special ending image
   yesBtn.style.display = "none";
   noBtn.style.display = "none";
 });
@@ -151,4 +150,3 @@ yesBtn.addEventListener("click", () => {
 
 </body>
 </html>
-
