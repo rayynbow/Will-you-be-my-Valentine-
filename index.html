@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Will You Be My Valentine? 💙</title>
+
 <style>
   body {
     margin: 0;
@@ -62,6 +63,7 @@
   }
 </style>
 </head>
+
 <body>
 
 <div class="image-box">
@@ -83,7 +85,6 @@ const noBtn = document.getElementById("noBtn");
 
 let step = 0;
 
-  
 // Persuasive questions
 const questions = [
   "Are you sure? I asked nicely 🥺",
@@ -98,18 +99,18 @@ const questions = [
   "Last chance… the cat is begging"
 ];
 
-// Use your images folder — make sure the paths match your repo
+// Cat images from local folder
 const images = [
   "images/cat1.jpg",
   "images/cat2.jpg",
   "images/cat3.jpg",
   "images/cat4.jpg",
   "images/cat5.jpg",
-  "images/cat6.jpg",
-  "images/cat7.jpg",
-  "images/cat8.jpg",
-  "images/cat9.jpg",
-  "images/cat10.jpg"
+  "images/cat1.jpg",
+  "images/cat2.jpg",
+  "images/cat3.jpg",
+  "images/cat4.jpg",
+  "images/cat5.jpg"
 ];
 
 let yesFont = 26;
@@ -119,14 +120,15 @@ let noPad = 18;
 
 noBtn.addEventListener("click", () => {
   if (step < questions.length) {
+    // Update question and cat image
     question.textContent = questions[step];
     catImg.src = images[step];
 
-    // NO button ALWAYS shrinks
+    // NO button shrinks
     noFont = Math.max(10, noFont - 3);
     noPad = Math.max(6, noPad - 2);
 
-    // YES button ALWAYS grows
+    // YES button grows
     yesFont += 4;
     yesPad += 3;
 
@@ -142,7 +144,7 @@ noBtn.addEventListener("click", () => {
 
 yesBtn.addEventListener("click", () => {
   question.textContent = "YAY 💙 YOU SAID YES 💌";
-  catImg.src = "images/cat5.jpg"; // special ending image
+  catImg.src = "images/cat5.jpg"; // final celebration cat
   yesBtn.style.display = "none";
   noBtn.style.display = "none";
 });
