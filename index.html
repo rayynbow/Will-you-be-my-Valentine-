@@ -212,3 +212,182 @@ setInterval(createFloatingGraphic, 500);
 </script>
 </body>
 </html>
+    font-size: 15px; /* base size in px */
+    margin: 10px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    color: white;
+    transition: all 0.3s;
+    position: relative;
+  }
+
+  button:hover {
+    transform: rotate(-5deg) scale(1.1);
+  }
+
+  #yesBtn {
+    background-color: #1e90ff;
+    box-shadow: 0 5px 15px rgba(30,144,255,0.4);
+  }
+
+  #noBtn {
+    background-color: #0059b3;
+    box-shadow: 0 5px 15px rgba(0,89,179,0.4);
+  }
+
+  canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+</head>
+<body>
+<!-- Deploy trigger ✔ -->
+<h1 id="question">Will you be my Valentine? 💙</h1>
+<div>
+  <button id="yesBtn">Yes 💌</button>
+  <button id="noBtn">No 😢</button>
+</div>
+
+<canvas id="fireworks"></canvas>
+
+<script>
+const question = document.getElementById('question');
+const yesBtn = document.getElementById('yesBtn');
+const noBtn = document.getElementById('noBtn');
+const canvas = document.getElementById('fireworks');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let noClicks = 0;
+
+// Persuasive messages
+const messages = [
+  "Are you sure? I promise I'm extra sweet! 🍬",
+  "No? But Otto says you should!",
+  "Come on, don't be shy! 💕",
+  "You know saying yes makes your day 1000% better! 😍",
+  "I think we're a perfect match! 🌟"
+];
+
+// Fixed starting sizes
+const NO_START_SIZE = 150;
+const YES_START_SIZE = 150;
+
+// Set initial sizes
+noBtn.style.fontSize = NO_START_SIZE/10 + 'px';
+noBtn.style.padding = NO_START_SIZE/5 + 'px ' + NO_START_SIZE/10 + 'px';
+yesBtn.style.fontSize = YES_START_SIZE/10 + 'px';
+yesBtn.style.padding = YES_START_SIZE/5 + 'px ' + YES_START_SIZE/10 + 'px';
+
+// No button always shrinks, Yes button grows
+noBtn.addEventListener('click', () => {
+  noClicks++;
+
+  // Shrink No button
+  let noSize = Math.max(50, NO_START_SIZE - noClicks*20);
+  noBtn.style.fontSize = noSize/10 + 'px';
+  noBtn.style.padding = noSize/5 + 'px ' + noSize/10 + 'px';
+
+  // Grow Yes button
+  let yesSize = YES_START_SIZE + noClicks*20;
+  yesBtn.style.fontSize = yesSize/50 + 'em';
+  yesBtn.style.padding = yesSize/10 + 'px ' + yesSize/20 + 'px';
+
+  // Update question
+  if (noClicks <= messages.length) {
+    question.textContent = messages[noClicks-1];
+  } else {
+    question.textContent = "Pretty please? 😇";
+  }
+});
+
+// When Yes is clicked
+yesBtn.addEventListener('click', () => {
+  question.textContent = "YAY! 💙 You said YES! 💌";
+  yesBtn.style.display = 'none';
+  noBtn.style.display = 'none';
+  startFireworks();
+});
+
+// Fireworks
+let fireworksArr = [];
+
+// Heart shape
+function drawHeart(x, y, size, color) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  ctx.bezierCurveTo(size/2, -size/2, size, size/3, 0, size);
+  ctx.bezierCurveTo(-size, size/3, -size/2, -size/2, 0, 0);
+  ctx.fill();
+  ctx.restore();
+}
+
+function startFireworks() {
+  setInterval(() => {
+    createFirework(Math.random() * canvas.width, Math.random() * canvas.height/2);
+  }, 300);
+  requestAnimationFrame(animateFireworks);
+}
+
+function createFirework(x, y) {
+  for (let i=0; i<30; i++) {
+    fireworksArr.push({
+      x: x,
+      y: y,
+      dx: (Math.random() - 0.5) * 6,
+      dy: (Math.random() - 0.5) * 6,
+      alpha: 1,
+      color: `hsl(${Math.random()*360}, 100%, 50%)`,
+      size: 5 + Math.random()*5
+    });
+  }
+}
+
+function animateFireworks() {
+  ctx.clearRect(0,0,canvas.width, canvas.height);
+  fireworksArr.forEach((f, i) => {
+    drawHeart(f.x, f.y, f.size, f.color);
+    f.x += f.dx;
+    f.y += f.dy;
+    f.alpha -= 0.02;
+    if(f.alpha <= 0) fireworksArr.splice(i, 1);
+  });
+  requestAnimationFrame(animateFireworks);
+}
+
+// Floating hearts and cats
+function createFloatingGraphic() {
+  const graphic = document.createElement('div');
+  const emoji = Math.random() > 0.5 ? '💙' : '🐱';
+  graphic.textContent = emoji;
+  graphic.style.position = 'fixed';
+  graphic.style.left = Math.random() * window.innerWidth + 'px';
+  graphic.style.top = window.innerHeight + 'px';
+  graphic.style.fontSize = (15 + Math.random()*25) + 'px';
+  graphic.style.opacity = Math.random();
+  graphic.style.pointerEvents = 'none';
+  graphic.style.transition = 'transform 6s linear';
+  document.body.appendChild(graphic);
+  setTimeout(() => {
+    graphic.style.transform = `translateY(-${window.innerHeight + 50}px)`;
+  }, 10);
+  setTimeout(() => {
+    graphic.remove();
+  }, 6000);
+}
+setInterval(createFloatingGraphic, 500);
+
+</script>
+</body>
+</html>
+
