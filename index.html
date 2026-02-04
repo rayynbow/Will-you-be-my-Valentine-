@@ -6,9 +6,7 @@
 <title>Will You Be My Valentine?</title>
 
 <style>
-  * {
-    box-sizing: border-box;
-  }
+  * { box-sizing: border-box; }
 
   body {
     margin: 0;
@@ -16,16 +14,16 @@
     background: linear-gradient(180deg, #8ec5ff, #cfe9ff);
     height: 100vh;
     display: flex;
-    justify-content: center;
     align-items: center;
-    text-align: center;
+    justify-content: center;
     overflow: hidden;
+    text-align: center;
   }
 
   .container {
-    padding: 20px;
     width: 100%;
     max-width: 420px;
+    padding: 20px;
   }
 
   h1 {
@@ -53,13 +51,8 @@
     touch-action: manipulation;
   }
 
-  #yesBtn {
-    background: #1e90ff;
-  }
-
-  #noBtn {
-    background: #0059b3;
-  }
+  #yesBtn { background: #1e90ff; }
+  #noBtn  { background: #0059b3; }
 
   canvas {
     position: fixed;
@@ -76,14 +69,8 @@
   }
 
   @keyframes floatUp {
-    from {
-      transform: translateY(0);
-      opacity: 1;
-    }
-    to {
-      transform: translateY(-110vh);
-      opacity: 0;
-    }
+    from { transform: translateY(0); opacity: 1; }
+    to   { transform: translateY(-110vh); opacity: 0; }
   }
 </style>
 </head>
@@ -115,14 +102,14 @@ let noScale = 1;
 let yesScale = 1;
 
 const messages = [
-  "But Babbbbeeeeeeee 💙",
-  "Even Otto wants you to say yes! 🐱",
+  "Are you sure? 💙",
+  "Otto says yes 🐱",
   "Come onnn 🥺",
   "This is getting unfair 😭",
   "You KNOW you want to 😏"
 ];
 
-// NO button logic (ALWAYS SHRINKS)
+// NO button — always shrinks
 noBtn.addEventListener("click", () => {
   noClicks++;
 
@@ -135,63 +122,74 @@ noBtn.addEventListener("click", () => {
   question.textContent = messages[noClicks - 1] || "Pretty please? 💙";
 });
 
-// YES button logic
+// YES button
 yesBtn.addEventListener("click", () => {
   question.textContent = "YAY 💙 YOU SAID YES 💌";
   yesBtn.remove();
   noBtn.remove();
-  startFireworks();
+  startHeartFireworks();
 });
 
-// FIREWORKS (lightweight)
-let sparks = [];
+// 💖 HEART FIREWORKS (mobile safe)
+let hearts = [];
 
-function startFireworks() {
+function startHeartFireworks() {
   setInterval(() => {
-    sparks.push({
+    hearts.push({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height * 0.4,
-      r: 0,
-      a: 1
+      size: 8 + Math.random() * 8,
+      alpha: 1,
+      dy: -1 - Math.random() * 2
     });
-  }, 700);
+  }, 250);
 
-  requestAnimationFrame(drawFireworks);
+  requestAnimationFrame(drawHearts);
 }
 
-function drawFireworks() {
+function drawHeart(x, y, size, alpha) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.scale(size, size);
+  ctx.globalAlpha = alpha;
+  ctx.fillStyle = "#ff4d6d";
+
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  ctx.bezierCurveTo(-1, -1, -2.5, 1, 0, 3);
+  ctx.bezierCurveTo(2.5, 1, 1, -1, 0, 0);
+  ctx.fill();
+
+  ctx.restore();
+}
+
+function drawHearts() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  sparks.forEach((s, i) => {
-    ctx.globalAlpha = s.a;
-    ctx.fillStyle = "#4da6ff";
-    ctx.beginPath();
-    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-    ctx.fill();
+  hearts.forEach((h, i) => {
+    drawHeart(h.x, h.y, h.size / 10, h.alpha);
+    h.y += h.dy;
+    h.alpha -= 0.02;
 
-    s.r += 2;
-    s.a -= 0.03;
-
-    if (s.a <= 0) sparks.splice(i, 1);
+    if (h.alpha <= 0) hearts.splice(i, 1);
   });
 
-  requestAnimationFrame(drawFireworks);
+  requestAnimationFrame(drawHearts);
 }
 
-// FLOATING CATS & HEARTS
+// Floating cats & hearts
 function spawnFloat() {
   const el = document.createElement("div");
   el.className = "float";
   el.textContent = Math.random() > 0.5 ? "🐱" : "💙";
   el.style.left = Math.random() * 100 + "vw";
   document.body.appendChild(el);
-
   setTimeout(() => el.remove(), 6000);
 }
 
 setInterval(spawnFloat, 900);
 
-// Resize handling
+// Resize support
 window.addEventListener("resize", () => {
   canvas.width = innerWidth;
   canvas.height = innerHeight;
@@ -199,4 +197,3 @@ window.addEventListener("resize", () => {
 </script>
 </body>
 </html>
-
